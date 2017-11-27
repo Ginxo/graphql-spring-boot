@@ -3,7 +3,7 @@ spring:
                name: poc-graphql-app
       data:
           mongodb:
-            uri: mongodb://localhost/cars?waitQueueMultiple=10000000
+            uri: mongodb://db/cars?waitQueueMultiple=10000000
 server:
       port: 8080
 
@@ -15,7 +15,6 @@ graphql:
                mapping: /graphql
                enabled: true
                corsEnabled: true
-
       spring-graphql-common:
                clientMutationIdName: clientMutationId
                injectClientMutationId: true

@@ -1,0 +1,23 @@
+version: "2.1"
+services:
+  graphql:
+    image: ginxo.graphql-kubernetes/poc-grapql-api-gen:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 9999:8080
+  db:
+    image: mongo
+    volumes:
+      - ./database:/data # volume in host -> $(pwd)/database
+    environment:
+      - MONGO_DB_APP_DATABASE=nodedb
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: ["CMD", "echo", "show dbs", "|", "mongo"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    command: mongod --smallfiles
