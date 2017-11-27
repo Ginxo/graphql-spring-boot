@@ -13,6 +13,19 @@
 		<version>1.5.3.RELEASE</version>
 	</parent>
 
+	<properties>
+		<java.version>1.8</java.version>
+		<apigen.version>3.0.0</apigen.version>
+		<graphql.starter.version>3.3.0</graphql.starter.version>
+		<embedler.version>2.0.0</embedler.version>
+		<graphql.version>3.0.0</graphql.version>
+
+		<!-- docker -->
+		<docker-maven-plugin.version>0.4.13</docker-maven-plugin.version>
+		<docker.host>http://7.129.8.26:5000</docker.host>
+		<docker.image.prefix>ginxo.graphql-kubernetes</docker.image.prefix>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -158,8 +171,6 @@
 
 
 		<plugins>
-
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -227,6 +238,28 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>${docker-maven-plugin.version}</version>
+				<configuration>
+					<serverId>dmfalicante</serverId>
+					<registryUrl>${docker.host}</registryUrl>
+					<imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+					<pushImage>false</pushImage>
+					<dockerDirectory>src/main/docker</dockerDirectory>
+					<imageTags>
+						<imageTag>${project.version}</imageTag>
+						<imageTag>latest</imageTag>
+					</imageTags>
+					<resources>
+						<resource>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}-fat.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
@@ -265,17 +298,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-
-
-
-	<properties>
-		<java.version>1.8</java.version>
-		<apigen.version>3.0.0</apigen.version>
-		<graphql.starter.version>3.3.0</graphql.starter.version>
-		<embedler.version>2.0.0</embedler.version>
-		<graphql.version>3.0.0</graphql.version>
-
-	</properties>
 
 </project>
